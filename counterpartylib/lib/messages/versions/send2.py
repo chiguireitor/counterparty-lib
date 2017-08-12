@@ -6,6 +6,7 @@ import struct
 
 from counterpartylib.lib import util
 from counterpartylib.lib import config
+from counterpartylib.lib import message_type
 from counterpartylib.lib.script import AddressError
 from counterpartylib.lib.exceptions import ValidateError
 from counterpartylib.lib.exceptions import UnpackError
@@ -18,7 +19,7 @@ LENGTH = 8 + 8
 ID = 1
 
 def pack(asset, quantity):
-    data = struct.pack(config.TXTYPE_FORMAT, ID)
+    data = message_type.pack(ID)
     data += struct.pack(FORMAT, util.asset_id(asset), quantity)
     return data
 
@@ -108,7 +109,7 @@ def parse(db, tx, message):
                     'quantity': quantity,
                     'status': status,
                    }
-        sql = 'insert into sends values(:tx_index, :tx_hash, :block_index, :source, :destination, :asset, :quantity, :status)'
+        sql = 'insert into sends values(:tx_index, :tx_hash, :block_index, :source, :destination, :asset, :quantity, :status, NULL)'
         cursor = db.cursor()
         cursor.execute(sql, bindings)
 
