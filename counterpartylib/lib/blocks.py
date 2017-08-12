@@ -355,6 +355,16 @@ def initialise(db):
         cursor.execute('''INSERT INTO assets VALUES (?,?,?,?)''', ('0', 'BTC', None, None))
         cursor.execute('''INSERT INTO assets VALUES (?,?,?,?)''', ('1', 'XCP', None, None))
 
+    # Addresses
+    # Leaving this here because in the future this could work for other things besides broadcast
+    cursor.execute('''CREATE TABLE IF NOT EXISTS addresses(
+                      address TEXT UNIQUE,
+                      options INTEGER)
+                   ''')
+    cursor.execute('''CREATE INDEX IF NOT EXISTS
+                      address_idx ON addresses (address)
+                   ''')
+
     # Consolidated
     send.initialise(db)
     destroy.initialise(db)
