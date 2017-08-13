@@ -79,8 +79,8 @@ def validate(db, source, destination, asset, quantity, block_index):
         try:
             results = cursor.execute('SELECT options FROM addresses WHERE address=?', (destination,))
             if results:
-                result = results.fetchone()[0]
-                if result['options'] & config.ADDRESS_OPTION_REQUIRE_MEMO and memo_bytes is not None:
+                result = results.fetchone()
+                if result and result['options'] & config.ADDRESS_OPTION_REQUIRE_MEMO:
                     raise ValidateError('destination requires memo')
         finally:
             cursor.close()

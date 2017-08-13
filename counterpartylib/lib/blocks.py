@@ -362,7 +362,7 @@ def initialise(db):
                       options INTEGER)
                    ''')
     cursor.execute('''CREATE INDEX IF NOT EXISTS
-                      address_idx ON addresses (address)
+                      addresses_idx ON addresses (address)
                    ''')
 
     # Consolidated
