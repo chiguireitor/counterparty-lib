@@ -363,6 +363,7 @@ def exec_tested_method(tx_name, method, tested_method, inputs, server_db):
         or tx_name == 'backend' \
         or tx_name == 'message_type' \
         or tx_name == 'address':
+        #print(tx_name, method, tested_method.__name__, inputs)
         return tested_method(*inputs)
     else:
         return tested_method(server_db, *inputs)

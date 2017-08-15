@@ -1270,7 +1270,7 @@ UNITTEST_VECTOR = {
         }, {
             'comment': 'send to a REQUIRE_MEMO address',
             'in': (ADDR[0], ADDR[4], 'XCP', DP['quantity']),
-            'error': (exceptions.ComposeError, 'destination requires memo')
+            'error': (exceptions.ComposeError, '[\'destination requires memo\']')
         }],
         'parse': [{
             'in': ({'tx_hash': 'db6d9052b576d973196363e11163d492f50926c2f1d1efd67b3d999817b0d04d', 'source': 'mn6q3dS2EnDUx3bmyWc6D4szJNVGtaR7zc', 'supported': 1, 'block_index': DP['default_block_index'], 'fee': 10000, 'block_time': 155409000, 'block_hash': DP['default_block_hash'], 'btc_amount': 7800, 'data': b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x05\xf5\xe1\x00', 'tx_index': 502, 'destination': 'mtQheFaSfWELRB2MyMBaiWjdDm6ux9Ezns'},),
@@ -3651,7 +3651,7 @@ UNITTEST_VECTOR = {
             'comment': 'CIP 9 enhanced send to a REQUIRE_MEMO address without memo',
             'mock_protocol_changes': {'enhanced_sends': True},
             'in': ('create_send', {'source': ADDR[0], 'destination': ADDR[4], 'asset': 'XCP', 'quantity': DP['small']}),
-            'error': (exceptions.ComposeError, 'destination requires memo')
+            'error': (Exception, "{'code': -32001, 'message': \"Error composing send transaction via API: ['destination requires memo']\"}") # RPCError isn't on standard exceptions list, and this error throws raw json
         }, {
             'comment': 'CIP 9 enhanced send to a REQUIRE_MEMO address with memo',
             'mock_protocol_changes': {'enhanced_sends': True},

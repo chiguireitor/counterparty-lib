@@ -86,7 +86,7 @@ def validate (db, source, destination, asset, quantity, memo_bytes, block_index)
         if results:
             result = results.fetchone()
             if result and result['options'] & config.ADDRESS_OPTION_REQUIRE_MEMO and memo_bytes is not None and (len(memo_bytes) == 0):
-                raise exceptions.ComposeError('destination requires memo')
+                problems.append('destination requires memo')
     finally:
         cursor.close()
 
