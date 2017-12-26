@@ -94,7 +94,7 @@ def date_passed(date):
 
 def price (numerator, denominator):
     """Return price as Fraction or Decimal."""
-    if CURRENT_BLOCK_INDEX >= 294500 or config.TESTNET: # Protocol change.
+    if CURRENT_BLOCK_INDEX >= 294500 or config.TESTNET or config.REGTEST: # Protocol change.
         return fractions.Fraction(numerator, denominator)
     else:
         numerator = D(numerator)
@@ -721,7 +721,7 @@ def unhexlify(hex_string):
 ### Protocol Changes ###
 def enabled(change_name, block_index=None):
     """Return True if protocol change is enabled."""
-    index_name = 'testnet_block_index' if config.TESTNET else 'block_index'
+    index_name = 'testnet_block_index' if config.TESTNET or config.REGTEST else 'block_index'
     enable_block_index = PROTOCOL_CHANGES[change_name][index_name]
 
     if not block_index:

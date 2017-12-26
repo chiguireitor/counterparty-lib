@@ -44,6 +44,8 @@ def rpc_call(payload):
     if response == None:
         if config.TESTNET:
             network = 'testnet'
+        elif config.REGTEST:
+            network = 'regtest'
         else:
             network = 'mainnet'
         raise BackendRPCError('Cannot communicate with backend at `{}`. (server is set to run on {}, is backend?)'.format(util.clean_url_for_log(url), network))

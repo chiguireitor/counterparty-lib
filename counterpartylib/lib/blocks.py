@@ -88,7 +88,7 @@ def parse_tx(db, tx):
         message = None
 
     # Protocol change.
-    rps_enabled = tx['block_index'] >= 308500 or config.TESTNET
+    rps_enabled = tx['block_index'] >= 308500 or config.TESTNET or config.REGTEST
 
     if message_type_id == send.ID:
         send.parse(db, tx, message)
@@ -505,7 +505,7 @@ def get_tx_info1(tx_hex, block_index, block_parser=None):
             data_chunk_length = data_pubkey[0]  # No ord() necessary.
             data_chunk = data_pubkey[1:data_chunk_length + 1]
             data += data_chunk
-        elif len(asm) == 5 and (block_index >= 293000 or config.TESTNET):    # Protocol change.
+        elif len(asm) == 5 and (block_index >= 293000 or config.TESTNET or config.REGTEST):    # Protocol change.
             # Be strict.
             pubkeyhash = get_pubkeyhash(vout.scriptPubKey)
             if not pubkeyhash:
@@ -743,7 +743,13 @@ def reinitialise(db, block_index=None):
     initialise(db)
 
     # clean consensus hashes if first block hash doesn't match with checkpoint.
-    checkpoints = check.CHECKPOINTS_TESTNET if config.TESTNET else check.CHECKPOINTS_MAINNET
+    if config.TESTNET:
+        checkpoints = check.CHECKPOINTS_TESTNET
+    elif config.REGTEST:
+        checkpoints = checks.CHECKPOINTS_REGTEST
+    else:
+        checkpoints = check.CHECKPOINTS_MAINNET
+    
     columns = [column['name'] for column in cursor.execute('''PRAGMA table_info(blocks)''')]
     for field in ['ledger_hash', 'txlist_hash']:
         if field in columns:
@@ -763,6 +769,11 @@ def reinitialise(db, block_index=None):
         # just blow away the consensus hashes with a full testnet reparse, as we could activate
         # new features retroactively, which could otherwise lead to ConsensusError exceptions being raised.
         logger.info("Testnet full reparse detected: Clearing all consensus hashes before performing reparse.")
+        cursor.execute('''UPDATE blocks SET ledger_hash = NULL, txlist_hash = NULL, messages_hash = NULL''')
+    elif config.REGTEST:
+        # just blow away the consensus hashes with a full regtest reparse, as we could activate
+        # new features retroactively, which could otherwise lead to ConsensusError exceptions being raised.
+        logger.info("Regtest full reparse detected: Clearing all consensus hashes before performing reparse.")
         cursor.execute('''UPDATE blocks SET ledger_hash = NULL, txlist_hash = NULL, messages_hash = NULL''')
 
     cursor.close()
@@ -963,7 +974,13 @@ def kickstart(db, bitcoind_dir):
     if input('Proceed with the initialization? (y/N) : ') != 'y':
         return
 
-    first_hash = config.BLOCK_FIRST_TESTNET_HASH if config.TESTNET else config.BLOCK_FIRST_MAINNET_HASH
+    if config.TESTNET:
+        first_hash = config.BLOCK_FIRST_TESTNET_HASH
+    elif config.REGTEST:
+        first_hash = config.BLOCK_FIRST_REGTEST_HASH
+    else:
+        first_hash = config.BLOCK_FIRST_MAINNET_HASH
+        
     start_time_total = time.time()
 
     # Get hash of last known block.

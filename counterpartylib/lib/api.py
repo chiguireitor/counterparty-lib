@@ -714,6 +714,7 @@ class APIServer(threading.Thread):
                 'last_message_index': last_message['message_index'] if last_message else -1,
                 'running_testnet': config.TESTNET,
                 'running_testcoin': config.TESTCOIN,
+				'running_regtest': config.REGTEST,
                 'version_major': config.VERSION_MAJOR,
                 'version_minor': config.VERSION_MINOR,
                 'version_revision': config.VERSION_REVISION
