@@ -121,18 +121,18 @@ def initialise_config(database_file=None, log_file=None, api_log_file=None,
         config.REGTEST = regtest
     else:
         config.REGTEST = False
-		
-	if config.TESTNET:
-		bitcoinlib.SelectParams('testnet' if config.TESTNET else 'mainnet')
-	elif config.REGTEST:
-		bitcoinlib.SelectParams('regtest')
-	else:
-		bitcoinlib.SelectParams('mainnet')
+
+    if config.TESTNET:
+        bitcoinlib.SelectParams('testnet')
+    elif config.REGTEST:
+        bitcoinlib.SelectParams('regtest')
+    else:
+        bitcoinlib.SelectParams('mainnet')
 
     network = ''
     if config.TESTNET:
         network += '.testnet'
-	if config.REGTEST:
+    if config.REGTEST:
         network += '.regtest'
     if config.TESTCOIN:
         network += '.testcoin'
@@ -260,8 +260,8 @@ def initialise_config(database_file=None, log_file=None, api_log_file=None,
     else:
         if config.TESTNET:
             config.INDEXD_PORT = config.DEFAULT_INDEXD_PORT_TESTNET
-		elif config.REGTEST:
-			config.INDEXD_PORT = config.DEFAULT_INDEXD_PORT_REGTEST
+        elif config.REGTEST:
+            config.INDEXD_PORT = config.DEFAULT_INDEXD_PORT_REGTEST
         else:
             config.INDEXD_PORT = config.DEFAULT_INDEXD_PORT
 
@@ -297,8 +297,8 @@ def initialise_config(database_file=None, log_file=None, api_log_file=None,
                 config.RPC_PORT = config.DEFAULT_RPC_PORT_TESTNET + 1
             else:
                 config.RPC_PORT = config.DEFAULT_RPC_PORT_TESTNET
-		elif config.REGTEST:
-			if config.TESTCOIN:
+        elif config.REGTEST:
+            if config.TESTCOIN:
                 config.RPC_PORT = config.DEFAULT_RPC_PORT_REGTEST + 1
             else:
                 config.RPC_PORT = config.DEFAULT_RPC_PORT_REGTEST
@@ -368,7 +368,7 @@ def initialise_config(database_file=None, log_file=None, api_log_file=None,
             config.BURN_END = config.BURN_END_TESTNET
             config.UNSPENDABLE = config.UNSPENDABLE_TESTNET
             config.P2SH_DUST_RETURN_PUBKEY = p2sh_dust_return_pubkey
-	elif config.REGTEST:
+    elif config.REGTEST:
         config.MAGIC_BYTES = config.MAGIC_BYTES_REGTEST
         if config.TESTCOIN:
             config.ADDRESSVERSION = config.ADDRESSVERSION_REGTEST

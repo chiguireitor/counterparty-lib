@@ -746,10 +746,10 @@ def reinitialise(db, block_index=None):
     if config.TESTNET:
         checkpoints = check.CHECKPOINTS_TESTNET
     elif config.REGTEST:
-        checkpoints = checks.CHECKPOINTS_REGTEST
+        checkpoints = check.CHECKPOINTS_REGTEST
     else:
         checkpoints = check.CHECKPOINTS_MAINNET
-    
+
     columns = [column['name'] for column in cursor.execute('''PRAGMA table_info(blocks)''')]
     for field in ['ledger_hash', 'txlist_hash']:
         if field in columns:
@@ -980,7 +980,7 @@ def kickstart(db, bitcoind_dir):
         first_hash = config.BLOCK_FIRST_REGTEST_HASH
     else:
         first_hash = config.BLOCK_FIRST_MAINNET_HASH
-        
+
     start_time_total = time.time()
 
     # Get hash of last known block.
